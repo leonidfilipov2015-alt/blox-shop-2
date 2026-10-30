@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Blox Shop</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 18px;
+      font-family: Arial, sans-serif;
+      background: var(--tg-theme-bg-color, #101827);
+      color: var(--tg-theme-text-color, white);
+    }
+
+    h1 { text-align: center; margin-bottom: 5px; }
+
+    .subtitle {
+      text-align: center;
+      color: var(--tg-theme-hint-color, #aab5c8);
+      margin-bottom: 22px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .tab {
+      flex: 1;
+      background: var(--tg-theme-secondary-bg-color, #253247);
+      color: var(--tg-theme-text-color, white);
+    }
+
+    .tab.active {
+      background: #2878ff;
+      color: white;
+    }
+
+    #catalog {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .product {
+      min-width: 0;
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--tg-theme-secondary-bg-color, #202d42);
+    }
+
+    .emoji { font-size: 35px; }
+    .product h3 { margin: 10px 0; font-size: 16px; }
+    .price { color: #68a5ff; font-weight: bold; }
+
+    .order {
+      width: 100%;
+      margin-top: 12px;
+      background: #2878ff;
+      color: white;
+    }
+
+    .channels {
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--tg-theme-secondary-bg-color, #202d42);
+    }
+
+    .channel {
+      display: block;
+      margin-top: 10px;
+      padding: 12px;
+      text-decoration: none;
+      text-align: center;
+      border-radius: 10px;
+      background: #2878ff;
+      color: white;
+    }
+
+    .note {
+      text-align: center;
+      font-size: 12px;
+      opacity: .7;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🛒 BLOX SHOP</h1>
+  <div class="subtitle">Blox Fruits • Steal a Brainrot</div>
+
+  <div class="tabs">
+    <button class="tab active" data-category="blox">
+      ⚡ Фрукты
+    </button>
+    <button class="tab" data-category="brainrot">
+      🧠 Брейнроты
+    </button>
+  </div>
+
+  <div id="catalog"></div>
+
+  <div class="channels">
+    <h3>📢 Наши Telegram-каналы</h3>
+
+    <a class="channel" href="https://t.me/jkhhkhg" target="_blank" rel="noopener">
+      Канал 1
+    </a>
+
+    <a class="channel" href="https://t.me/+lcdr_xqvSuMyN2Vi" target="_blank" rel="noopener">
+      Канал 2
+    </a>
+
+    <a class="channel" href="https://t.me/+Js8Fu1TfXMExNzc6" target="_blank" rel="noopener">
+      Канал 3
+    </a>
+  </div>
+
+  <div class="note">
+    Выбери товар и нажми «Заказать».
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    // Твой Telegram username, без символа @.
+    const SELLER_USERNAME = "Legendjhnb";
+
+    // Изменяй товары и цены здесь.
+    const products = [
+      { category: "blox", name: "Lightning", emoji: "⚡", price: "25 рб за 1 шт" },
+      { category: "blox", name: "Shadow", emoji: "🌑", price: "5 рб за 1 шт" },
+      { category: "blox", name: "Mammoth", emoji: "🦣", price: "10 рб за 1 шт" },
+      { category: "blox", name: "Portal", emoji: "🌀", price: "15 рб за 1 шт" },
+
+      { category: "brainrot", name: "Чиклетейра радужная", emoji: "🧠", price: "5 рб за 1 шт" },
+      { category: "brainrot", name: "4 брейнрота  ", emoji: "👾", price: "15 рб" }
+    ];
+
+    let currentCategory = "blox";
+    const catalog = document.getElementById("catalog");
+
+    function renderCatalog() {
+      catalog.innerHTML = "";
+
+      products
+        .filter(product => product.category === currentCategory)
+        .forEach(product => {
+          const card = document.createElement("div");
+          card.className = "product";
+
+          const emoji = document.createElement("div");
+          emoji.className = "emoji";
+          emoji.textContent = product.emoji;
+
+          const title = document.createElement("h3");
+          title.textContent = product.name;
+
+          const price = document.createElement("div");
+          price.className = "price";
+          price.textContent = product.price;
+
+          const orderButton = document.createElement("button");
+          orderButton.className = "order";
+          orderButton.textContent = "🛒 Заказать";
+
+          orderButton.onclick = () => {
+            const message =
+              "Здравствуйте! Хочу заказать: " + product.name +
+              ". Цена: " + product.price;
+
+            const url =
+              "https://t.me/" + SELLER_USERNAME +
+              "?text=" + encodeURIComponent(message);
+
+            if (window.Telegram && window.Telegram.WebApp) {
+              tg.openTelegramLink(url);
+            } else {
+              window.open(url, "_blank", "noopener");
+            }
+          };
+
+          card.append(emoji, title, price, orderButton);
+          catalog.appendChild(card);
+        });
+    }
+
+    document.querySelectorAll(".tab").forEach(button => {
+      button.addEventListener("click", () => {
+        currentCategory = button.dataset.category;
+
+        document.querySelectorAll(".tab").forEach(tab => {
+          tab.classList.toggle("active", tab === button);
+        });
+
+        renderCatalog();
+      });
+    });
+
+    renderCatalog();
+  </script>
+</body>
+</html>
