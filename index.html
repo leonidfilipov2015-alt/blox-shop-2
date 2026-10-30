@@ -2,224 +2,192 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101827">
-  <title>Blox Shop</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blox Shop</title>
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+* {
+    box-sizing: border-box;
+}
 
-  <style>
-    * { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #101525;
+    color: white;
+}
 
-    body {
-      margin: 0;
-      padding: 18px;
-      font-family: Arial, sans-serif;
-      background: var(--tg-theme-bg-color, #101827);
-      color: var(--tg-theme-text-color, white);
-    }
+header {
+    text-align: center;
+    padding: 25px 15px;
+    background: #192541;
+}
 
-    h1 { text-align: center; margin-bottom: 5px; }
+header h1 {
+    color: #65aaff;
+    font-size: 32px;
+}
 
-    .subtitle {
-      text-align: center;
-      color: var(--tg-theme-hint-color, #aab5c8);
-      margin-bottom: 22px;
-    }
+header p {
+    color: #c3cce0;
+}
 
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    flex-wrap: wrap;
+}
 
-    button {
-      border: 0;
-      border-radius: 12px;
-      padding: 12px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-    }
+nav button {
+    background: #263d68;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+}
 
-    .tab {
-      flex: 1;
-      background: var(--tg-theme-secondary-bg-color, #253247);
-      color: var(--tg-theme-text-color, white);
-    }
+nav button.active {
+    background: #2878ed;
+}
 
-    .tab.active {
-      background: #2878ff;
-      color: white;
-    }
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 15px;
+    padding: 15px;
+    max-width: 900px;
+    margin: auto;
+}
 
-    #catalog {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
+.product {
+    background: #1b2740;
+    border-radius: 15px;
+    padding: 18px;
+    text-align: center;
+}
 
-    .product {
-      min-width: 0;
-      padding: 14px;
-      border-radius: 16px;
-      background: var(--tg-theme-secondary-bg-color, #202d42);
-    }
+.product .emoji {
+    font-size: 45px;
+}
 
-    .emoji { font-size: 35px; }
-    .product h3 { margin: 10px 0; font-size: 16px; }
-    .price { color: #68a5ff; font-weight: bold; }
+.product h3 {
+    margin: 10px 0;
+}
 
-    .order {
-      width: 100%;
-      margin-top: 12px;
-      background: #2878ff;
-      color: white;
-    }
+.price {
+    color: #62a8ff;
+    font-weight: bold;
+}
 
-    .channels {
-      margin-top: 24px;
-      padding: 16px;
-      border-radius: 16px;
-      background: var(--tg-theme-secondary-bg-color, #202d42);
-    }
+.buy {
+    background: #2878ed;
+    color: white;
+    border: none;
+    padding: 11px;
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
 
-    .channel {
-      display: block;
-      margin-top: 10px;
-      padding: 12px;
-      text-decoration: none;
-      text-align: center;
-      border-radius: 10px;
-      background: #2878ff;
-      color: white;
-    }
+.buy:hover {
+    background: #145bc0;
+}
 
-    .note {
-      text-align: center;
-      font-size: 12px;
-      opacity: .7;
-      margin-top: 20px;
-    }
-  </style>
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #aab5ca;
+}
+</style>
 </head>
 
 <body>
-  <h1>🛒 BLOX SHOP</h1>
-  <div class="subtitle">Blox Fruits • Steal a Brainrot</div>
 
-  <div class="tabs">
-    <button class="tab active" data-category="blox">
-      ⚡ Фрукты
+<header>
+    <h1>🛒 BLOX SHOP</h1>
+    <p>Магазин Blox Fruits и Steal a Brainrot</p>
+</header>
+
+<nav>
+    <button class="active" onclick="showProducts('blox', this)">
+        🍎 Blox Fruits
     </button>
-    <button class="tab" data-category="brainrot">
-      🧠 Брейнроты
+
+    <button onclick="showProducts('brainrot', this)">
+        🧠 Brainrot
     </button>
-  </div>
+</nav>
 
-  <div id="catalog"></div>
+<div class="products" id="products"></div>
 
-  <div class="channels">
-    <h3>📢 Наши Telegram-каналы</h3>
+<footer>
+    <p>🔥 Blox Shop</p>
+    <p>Покупка через продавца</p>
+    <p>Продавец: @Legendjhnb</p>
+</footer>
 
-    <a class="channel" href="https://t.me/jkhhkhg" target="_blank" rel="noopener">
-      Канал 1
-    </a>
+<script>
+const products = {
+    blox: [
+        {name: "Лайтинг", price: "25 Robux", emoji: "⚡"},
+        {name: "Шадоу", price: "10 Robux", emoji: "🌑"},
+        {name: "Мамонт", price: "15 Robux", emoji: "🐘"},
+        {name: "Портал", price: "15 Robux", emoji: "🌀"},
+        {name: "Тесто", price: "Уточнить", emoji: "🍩"},
+        {name: "Газ", price: "Уточнить", emoji: "☁️"}
+    ],
 
-    <a class="channel" href="https://t.me/+lcdr_xqvSuMyN2Vi" target="_blank" rel="noopener">
-      Канал 2
-    </a>
+    brainrot: [
+        {name: "Брейнрот 1", price: "Уточнить", emoji: "🧠"},
+        {name: "Брейнрот 2", price: "Уточнить", emoji: "🐸"},
+        {name: "Брейнрот 3", price: "Уточнить", emoji: "🦈"}
+    ]
+};
 
-    <a class="channel" href="https://t.me/+Js8Fu1TfXMExNzc6" target="_blank" rel="noopener">
-      Канал 3
-    </a>
-  </div>
+function showProducts(category, button) {
+    const container = document.getElementById("products");
 
-  <div class="note">
-    Выбери товар и нажми «Заказать».
-  </div>
+    container.innerHTML = "";
 
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
-
-    // Твой Telegram username, без символа @.
-    const SELLER_USERNAME = "Legendjhnb";
-
-    // Изменяй товары и цены здесь.
-    const products = [
-      { category: "blox", name: "Lightning", emoji: "⚡", price: "25 рб за 1 шт" },
-      { category: "blox", name: "Shadow", emoji: "🌑", price: "5 рб за 1 шт" },
-      { category: "blox", name: "Mammoth", emoji: "🦣", price: "10 рб за 1 шт" },
-      { category: "blox", name: "Portal", emoji: "🌀", price: "15 рб за 1 шт" },
-
-      { category: "brainrot", name: "Чиклетейра радужная", emoji: "🧠", price: "5 рб за 1 шт" },
-      { category: "brainrot", name: "4 брейнрота  ", emoji: "👾", price: "15 рб" }
-    ];
-
-    let currentCategory = "blox";
-    const catalog = document.getElementById("catalog");
-
-    function renderCatalog() {
-      catalog.innerHTML = "";
-
-      products
-        .filter(product => product.category === currentCategory)
-        .forEach(product => {
-          const card = document.createElement("div");
-          card.className = "product";
-
-          const emoji = document.createElement("div");
-          emoji.className = "emoji";
-          emoji.textContent = product.emoji;
-
-          const title = document.createElement("h3");
-          title.textContent = product.name;
-
-          const price = document.createElement("div");
-          price.className = "price";
-          price.textContent = product.price;
-
-          const orderButton = document.createElement("button");
-          orderButton.className = "order";
-          orderButton.textContent = "🛒 Заказать";
-
-          orderButton.onclick = () => {
-            const message =
-              "Здравствуйте! Хочу заказать: " + product.name +
-              ". Цена: " + product.price;
-
-            const url =
-              "https://t.me/" + SELLER_USERNAME +
-              "?text=" + encodeURIComponent(message);
-
-            if (window.Telegram && window.Telegram.WebApp) {
-              tg.openTelegramLink(url);
-            } else {
-              window.open(url, "_blank", "noopener");
-            }
-          };
-
-          card.append(emoji, title, price, orderButton);
-          catalog.appendChild(card);
-        });
-    }
-
-    document.querySelectorAll(".tab").forEach(button => {
-      button.addEventListener("click", () => {
-        currentCategory = button.dataset.category;
-
-        document.querySelectorAll(".tab").forEach(tab => {
-          tab.classList.toggle("active", tab === button);
-        });
-
-        renderCatalog();
-      });
+    document.querySelectorAll("nav button").forEach(btn => {
+        btn.classList.remove("active");
     });
 
-    renderCatalog();
-  </script>
+    button.classList.add("active");
+
+    products[category].forEach(product => {
+        container.innerHTML += `
+            <div class="product">
+                <div class="emoji">${product.emoji}</div>
+                <h3>${product.name}</h3>
+                <div class="price">${product.price}</div>
+                <button class="buy"
+                    onclick="buyProduct('${product.name}')">
+                    💬 Купить
+                </button>
+            </div>
+        `;
+    });
+}
+
+function buyProduct(name) {
+    const message = encodeURIComponent(
+        "Здравствуйте! Хочу купить: " + name
+    );
+
+    window.open(
+        "https://t.me/Legendjhnb?text=" + message,
+        "_blank"
+    );
+}
+
+showProducts("blox", document.querySelector("nav button"));
+</script>
+
 </body>
 </html>
